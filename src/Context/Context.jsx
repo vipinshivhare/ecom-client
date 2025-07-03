@@ -52,9 +52,11 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const clearCart =() =>{
-    setCart([]);
-  }
+  const clearCart = () => {
+  setCart([]);
+  localStorage.removeItem('cart');
+};
+
   
   useEffect(() => {
     refreshData();

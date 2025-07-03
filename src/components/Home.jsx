@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import AppContext from "../Context/Context";
-import unplugged from "../assets/unplugged.png"
+import unplugged from "../assets/unplugged.png";
+import placeholder from "../assets/placeholder.png";
+import Notification from "./Notification";
 
 const Home = ({ selectedCategory }) => {
   const { data, isError, addToCart, refreshData } = useContext(AppContext);
   const [products, setProducts] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [showNotification, setShowNotification] = useState(false); 
+  const [notificationMessage, setNotificationMessage] = useState(""); 
 
   useEffect(() => {
     if (!isDataFetched) {
@@ -18,30 +21,11 @@ const Home = ({ selectedCategory }) => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      const fetchImagesAndUpdateProducts = async () => {
-        const updatedProducts = await Promise.all(
-          data.map(async (product) => {
-            try {
-              const response = await axios.get(
-                `http://localhost:8080/api/product/${product.id}/image`,
-                { responseType: "blob" }
-              );
-              const imageUrl = URL.createObjectURL(response.data);
-              return { ...product, imageUrl };
-            } catch (error) {
-              console.error(
-                "Error fetching image for product ID:",
-                product.id,
-                error
-              );
-              return { ...product, imageUrl: "placeholder-image-url" };
-            }
-          })
-        );
-        setProducts(updatedProducts);
-      };
-
-      fetchImagesAndUpdateProducts();
+      const updatedProducts = data.map((product) => ({
+        ...product,
+        imageUrl: product.imageUrl || placeholder,
+      }));
+      setProducts(updatedProducts);
     }
   }, [data]);
 
@@ -49,15 +33,34 @@ const Home = ({ selectedCategory }) => {
     ? products.filter((product) => product.category === selectedCategory)
     : products;
 
+  const handleAddToCart = (product) => {
+
+    addToCart(product);
+    setNotificationMessage(`${product.name} added to cart!`); 
+    setShowNotification(true); 
+
+    console.log("Notification state set to true.");
+
+    setTimeout(() => {
+      setShowNotification(false);
+      setNotificationMessage(""); // Clear message
+   
+      console.log("Notification hidden after timeout.");
+     
+    }, 3000); 
+  };
+
   if (isError) {
     return (
       <h2 className="text-center" style={{ padding: "18rem" }}>
-      <img src={unplugged} alt="Error" style={{ width: '100px', height: '100px' }}/>
+        <img src={unplugged} alt="Error" style={{ width: "100px", height: "100px" }} />
       </h2>
     );
   }
+
   return (
     <>
+      <Notification show={showNotification} message={notificationMessage} type="success" />
       <div
         className="grid"
         style={{
@@ -81,45 +84,40 @@ const Home = ({ selectedCategory }) => {
           </h2>
         ) : (
           filteredProducts.map((product) => {
-            const { id, brand, name, price, productAvailable, imageUrl } =
-              product;
-            const cardStyle = {
-              width: "18rem",
-              height: "12rem",
-              boxShadow: "rgba(0, 0, 0, 0.24) 0px 2px 3px",
-              backgroundColor: productAvailable ? "#fff" : "#ccc",
-            };
+            const { id, brand, name, price, available, imageUrl } = product;
+
             return (
-              <div
-                className="card mb-3"
-                style={{
-                  width: "250px",
-                  height: "360px",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                  borderRadius: "10px",
-                  overflow: "hidden", 
-                  backgroundColor: productAvailable ? "#fff" : "#ccc",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent:'flex-start',
-                  alignItems:'stretch'
-                }}
-                key={id}
-              >
-                <Link
-                  to={`/product/${id}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
+                <div
+                  className="card mb-3"
+                  style={{
+                    width: "250px",
+                    height: "400px",
+                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    backgroundColor: available ? "#fff" : "#ccc",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                    alignItems: "stretch",
+                  }}
+                  key={id}
                 >
+                <Link to={`/product/${id}`} style={{ textDecoration: "none", color: "inherit" }}>
                   <img
                     src={imageUrl}
                     alt={name}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = placeholder;
+                    }}
                     style={{
                       width: "100%",
-                      height: "150px", 
-                      objectFit: "cover",  
+                      height: "150px",
+                      objectFit: "cover",
                       padding: "5px",
                       margin: "0",
-                      borderRadius: "10px 10px 10px 10px", 
+                      borderRadius: "10px 10px 10px 10px",
                     }}
                   />
                   <div
@@ -150,23 +148,35 @@ const Home = ({ selectedCategory }) => {
                     <div className="home-cart-price">
                       <h5
                         className="card-text"
-                        style={{ fontWeight: "600", fontSize: "1.1rem",marginBottom:'5px' }}
+                        style={{
+                          fontWeight: 700,
+                          fontSize: '1.1rem',
+                          color: 'var(--color-primary)'
+                        }}
                       >
-                        <i class="bi bi-currency-rupee"></i>
-                        {price}
+                        <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>₹{price}</span>
                       </h5>
                     </div>
                     <button
-                      className="btn-hover color-9"
-                      style={{margin:'10px 25px 0px '  }}
+                      className="btn"
+                      style={{
+                        marginTop: 12,
+                        background: 'linear-gradient(90deg, #34d399 0%, #ffe066 40%, #60a5fa 80%, #fb7185 100%)',
+                        color: '#fff',
+                        fontWeight: 700,
+                        border: 'none',
+                        boxShadow: '0 2px 8px rgba(37,99,235,0.10)',
+                        letterSpacing: '0.5px',
+                        transition: 'background 0.18s, box-shadow 0.18s',
+                      }}
                       onClick={(e) => {
                         e.preventDefault();
-                        addToCart(product);
+                        if (available) handleAddToCart(product);
                       }}
-                      disabled={!productAvailable}
+                      disabled={!available}
                     >
-                      {productAvailable ? "Add to Cart" : "Out of Stock"}
-                    </button> 
+                      {available ? "Add to Cart" : "Out of Stock"}
+                    </button>
                   </div>
                 </Link>
               </div>
