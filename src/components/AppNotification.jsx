@@ -1,5 +1,5 @@
 import React from "react";
-import '../styles/AppNotification.css'; 
+import '../styles/AppNotification.css';
 
 const icons = {
   success: (
@@ -16,7 +16,7 @@ const icons = {
   ),
 };
 
-const AppNotification = ({ show, message, type = "success", onClose }) => { // Renamed component
+const AppNotification = ({ show, message, type = "success", onClose }) => {
   if (!show) return null;
 
   return (
@@ -29,11 +29,11 @@ const AppNotification = ({ show, message, type = "success", onClose }) => { // R
           className="notification-close-button"
           aria-label="Close notification"
         >
-          <svg width="18" height="18" viewBox="0 0 18 18"><path d="M4 4l10 10M14 4l-10 10" stroke="#333" strokeWidth="2.2" strokeLinecap="round"/></svg>
+          <svg width="18" height="18" viewBox="0 0 18 18"><path d="M4 4l10 10M14 4l-10 10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg>
         </button>
       )}
     </div>
   );
 };
 
-export default AppNotification; // Export renamed component
+export default AppNotification;

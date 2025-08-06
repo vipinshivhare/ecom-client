@@ -7,20 +7,20 @@
   width: 100%;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  position: fixed; /* Ensure it stays fixed at the top */
+  position: fixed;
   top: 0;
   left: 0;
-  box-sizing: border-box; /* Include padding in width */
+  box-sizing: border-box;
 }
 
 .navbar-container {
+  display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  display: flex; /* Use flexbox for internal alignment */
-  justify-content: space-between; /* Distribute items */
+  justify-content: space-between;
+  flex-wrap: nowrap;
   width: 100%;
-  max-width: 1200px; /* Limit content width */
-  margin: 0 auto; /* Center content */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .navbar-brand {
@@ -29,84 +29,25 @@
   font-size: 1.5rem;
   letter-spacing: 1px;
   text-shadow: 0 1px 8px #fffbe7;
-  white-space: nowrap; /* Prevent wrapping */
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .navbar-toggler {
   border: none;
   background: transparent;
   font-size: 1.5rem;
-  color: var(--navbar_text); /* Ensure toggler icon color changes with theme */
+  color: var(--navbar_text);
+  margin-left: auto;
+  flex-shrink: 0;
+  display: none;
 }
 
-.navbar-collapse {
-  flex-grow: 1; /* Allow collapse content to grow */
-}
-
-.navbar-nav .nav-item {
-  margin-right: 15px; /* Spacing between nav items */
-}
-
-.navbar-nav .nav-link {
-  color: var(--navbar_text); /* Use navbar_text for theme switching */
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-
-.navbar-nav .nav-link:hover {
-  color: var(--link_hover_color); /* Use link_hover_color for theme switching */
-}
-
-.navbar-nav .nav-link.active {
-  color: #047857; /* Specific color for active home link */
-}
-
-.navbar-nav .nav-link[href="/add_product"] {
-  color: #b91c1c; /* Specific color for add product link */
-}
-
-.navbar-nav .nav-link[role="button"] {
-  color: #2563eb; /* Specific color for categories dropdown */
-}
-
-.dropdown-menu {
-  background-color: var(--card-bg-clr); /* Use card-bg-clr for dropdown background */
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  border: 1px solid var(--color-border);
-  padding: 8px 0;
-}
-
-.dropdown-item {
-  color: var(--para-clr); /* Use para-clr for dropdown item text */
-  font-weight: 600;
-  padding: 8px 16px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.dropdown-item:hover {
-  background-color: var(--category-hvr); /* Use category-hvr for hover effect */
-  color: var(--link_hover_color); /* Adjust text color on hover */
-}
-
-.theme-btn {
-  background: #60a5fa;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
+/* Cart icon always visible */
+.navbar-right-fixed-icons {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-right: 16px;
-  flex-shrink: 0; /* Prevent shrinking */
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.theme-btn:hover {
-  transform: scale(1.1);
-  background: #3b82f6;
+  gap: 12px;
 }
 
 .cart-icon-container {
@@ -115,7 +56,6 @@
   font-weight: 600;
   display: flex;
   align-items: center;
-  margin-right: 16px; /* Space before search input */
   flex-shrink: 0;
 }
 
@@ -139,6 +79,33 @@
   box-shadow: 0 2px 8px rgba(37,99,235,0.12);
 }
 
+/* Theme button + Search (moved inside collapsible for mobile) */
+.navbar-right-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.theme-btn {
+  background: #60a5fa;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.theme-btn:hover {
+  transform: scale(1.1);
+  background: #3b82f6;
+}
+
 .search-input {
   border: 1.5px solid #60a5fa;
   border-radius: 12px;
@@ -157,16 +124,16 @@
 
 .search-results-dropdown {
   position: absolute;
-  top: calc(100% + 5px); /* Position below search input */
+  top: calc(100% + 5px);
   left: 0;
   width: 100%;
-  background: var(--search_result-bg); /* Use search_result-bg for theme switching */
+  background: var(--search_result-bg);
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(96,165,250,0.10);
   z-index: 10;
   padding: 0;
   list-style: none;
-  max-height: 200px; /* Limit height for scrollability */
+  max-height: 200px;
   overflow-y: auto;
   border: 1px solid var(--color-border);
 }
@@ -174,7 +141,7 @@
 .search-results-item {
   padding: 0.7em 1em;
   border-bottom: 1px solid var(--color-border);
-  color: var(--para-clr); /* Use para-clr for text */
+  color: var(--para-clr);
   transition: background-color 0.2s ease;
 }
 
@@ -183,13 +150,13 @@
 }
 
 .search-results-item:hover {
-  background-color: var(--category-hvr); /* Use category-hvr for hover effect */
+  background-color: var(--category-hvr);
 }
 
 .search-result-link {
-  color: #b91c1c; /* Specific color for search result link */
+  color: #b91c1c;
   text-decoration: none;
-  display: block; /* Make link fill the list item */
+  display: block;
 }
 
 .no-results-message {
@@ -198,44 +165,151 @@
   text-align: center;
 }
 
-/* Responsive adjustments */
-@media (max-width: 991px) { /* Bootstrap's lg breakpoint */
+/* Nav links */
+.navbar-collapse {
+  flex-grow: 1;
+  flex-basis: auto;
+  margin-left: 20px;
+}
+
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-nav .nav-item {
+  list-style: none;
+  margin-right: 15px;
+}
+
+.navbar-nav .nav-link {
+  color: var(--navbar_text);
+  font-weight: 600;
+  transition: color 0.2s ease;
+  padding: 0.5em 0;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--link_hover_color);
+}
+
+.navbar-nav .nav-link.active {
+  color: #047857;
+}
+
+.navbar-nav .nav-link[href="/add_product"] {
+  color: #b91c1c;
+}
+
+.navbar-nav .nav-link[role="button"] {
+  color: #2563eb;
+}
+
+.dropdown-menu {
+  background-color: var(--card-bg-clr);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  border: 1px solid var(--color-border);
+  padding: 8px 0;
+  position: absolute;
+}
+
+.dropdown-item {
+  color: var(--para-clr);
+  font-weight: 600;
+  padding: 8px 16px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--category-hvr);
+  color: var(--link_hover_color);
+}
+
+/* ---------- Responsive Adjustments ---------- */
+
+@media (max-width: 991px) {
   .navbar-container {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
-  .navbar-nav {
-    width: 100%;
+
+  .navbar-toggler {
+    display: block;
+    order: 3;
+    margin-left: 10px;
+  }
+
+  .navbar-brand {
+    order: 1;
+  }
+
+  .navbar-right-fixed-icons {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .navbar-collapse {
+    flex-basis: 100%;
+    order: 4;
     margin-top: 10px;
+    text-align: center;
   }
+
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+
   .navbar-nav .nav-item {
     margin-right: 0;
     width: 100%;
   }
+
   .navbar-nav .nav-link {
     padding: 10px 0;
   }
-  .theme-btn, .cart-icon-container {
-    margin-right: 0;
-    margin-top: 10px;
-  }
-  .d-flex.align-items-center.cart {
+
+  .navbar-right-icons {
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    flex-wrap: wrap;
-    justify-content: flex-start;
     margin-top: 10px;
   }
+
   .search-input {
-    width: 100%;
-    margin-left: 0 !important; /* Override inline style */
+    width: 90%;
     margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
   }
+
   .search-results-dropdown {
-    width: calc(100% - 32px); /* Adjust width for padding */
-    left: 16px; /* Align with search input */
-    top: auto; /* Remove fixed top */
-    bottom: 0; /* Position at bottom of viewport if needed, or adjust dynamically */
-    transform: translateY(100%); /* Position below input */
+    position: static;
+    width: 90%;
+    margin: 0 auto;
+    transform: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .navbar-right-icons {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .navbar-right-fixed-icons {
+    order: 2;
   }
 }
 

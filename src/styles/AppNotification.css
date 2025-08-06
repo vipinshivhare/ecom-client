@@ -9,42 +9,39 @@
   gap: 18px;
   padding: 18px 28px 18px 18px;
   border-radius: 18px;
-  /* Enhanced shadow for a softer, more diffused look */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
   z-index: 2000;
   font-size: 17px;
   font-weight: 500;
-  /* Adjusted animation duration and timing for a smoother feel */
-  animation: slideGlassInOut 3.8s forwards cubic-bezier(0.68, -0.55, 0.27, 1.55); /* More bouncy entry/exit */
-  /* Increased blur for a stronger glass effect */
+  animation: slideGlassInOut 3.8s forwards cubic-bezier(0.68, -0.55, 0.27, 1.55);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: box-shadow 0.3s ease-in-out; /* Slightly longer transition for hover */
-  opacity: 0; /* Start hidden for animation */
-  transform: translateX(100%); /* Start off-screen */
+  transition: box-shadow 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateX(100%);
 }
 
 /* Dynamic background and border colors based on type */
 .notification-popup.success {
-  background: rgba(75, 181, 67, 0.15); /* Slightly more transparent */
+  background: rgba(75, 181, 67, 0.15);
   border: 1.5px solid #4BB543;
   color: #4BB543;
 }
 
 .notification-popup.error {
-  background: rgba(220, 53, 69, 0.15); /* Slightly more transparent */
+  background: rgba(220, 53, 69, 0.15);
   border: 1.5px solid #dc3545;
   color: #dc3545;
 }
 
 .notification-popup.info {
-  background: rgba(13, 202, 240, 0.15); /* Slightly more transparent */
+  background: rgba(13, 202, 240, 0.15);
   border: 1.5px solid #0dcaf0;
   color: #0dcaf0;
 }
 
 .notification-popup.warning {
-  background: rgba(255, 193, 7, 0.15); /* Slightly more transparent */
+  background: rgba(255, 193, 7, 0.15);
   border: 1.5px solid #ffc107;
   color: #ffc107;
 }
@@ -53,18 +50,17 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  /* Subtle bounce animation for icons */
   animation: iconBounce 0.6s ease-out;
 }
 
 .notification-message {
   flex: 1;
   line-height: 1.4;
-  font-weight: 600; /* Slightly bolder message text */
+  font-weight: 600;
 }
 
 .notification-close-button {
-  background: rgba(255, 255, 255, 0.6); /* Slightly more opaque background */
+  background: rgba(255, 255, 255, 0.6);
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -78,7 +74,7 @@
 }
 
 .notification-close-button:hover {
-  background: rgba(255, 255, 255, 0.8); /* More noticeable hover */
+  background: rgba(255, 255, 255, 0.8);
   transform: scale(1.1);
 }
 
@@ -97,10 +93,9 @@
   100% { opacity: 0; transform: translateX(100px); }
 }
 
-/* New keyframe for icon bounce */
 @keyframes iconBounce {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); } /* Slight upward bounce */
+  50% { transform: translateY(-3px); }
 }
 
 /* Responsive adjustments */
@@ -132,11 +127,10 @@
     font-size: 14px;
     padding: 12px 15px 12px 12px;
   }
-  /* On very small screens, slightly increase background opacity for readability */
   .notification-popup.error,
   .notification-popup.warning,
   .notification-popup.info,
   .notification-popup.success {
-    background: rgba(var(--color-rgb-base), 0.25); /* This assumes --color-rgb-base is defined in App.css */
+    background: rgba(var(--color-rgb-base, 0,0,0), 0.25);
   }
 }

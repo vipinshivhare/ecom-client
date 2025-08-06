@@ -2,8 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import AppContext from "../Context/Context";
 import axios from "../axios";
 import CheckoutPopup from "./CheckoutPopup";
-import AppNotification from "./AppNotification"; // Changed import from Notification to AppNotification
-import placeholder from "../assets/placeholder.png"; // Ensure placeholder is imported
+import AppNotification from "./AppNotification";
+import placeholder from "../assets/placeholder.png";
 import '../styles/Cart.css';
 
 const Cart = () => {
@@ -13,8 +13,8 @@ const Cart = () => {
   const [showModal, setShowModal] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
-  const [notificationType, setNotificationType] = useState("success"); // Added notification type
-  const [isLoading, setIsLoading] = useState(false); // New loading state for checkout
+  const [notificationType, setNotificationType] = useState("success");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const updateCartItemsWithImageUrl = () => {
@@ -42,13 +42,13 @@ const Cart = () => {
         const originalProduct = data.find((p) => p.id === itemId);
         if (originalProduct && item.quantity < originalProduct.quantity) {
           setNotificationMessage("Quantity increased");
-          setNotificationType("info"); // Changed to info
+          setNotificationType("info");
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 1500);
           return { ...item, quantity: item.quantity + 1 };
         } else {
           setNotificationMessage("Cannot add more than available stock");
-          setNotificationType("warning"); // Changed to warning
+          setNotificationType("warning");
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 2000);
         }
@@ -68,7 +68,7 @@ const Cart = () => {
       .filter((item) => item.quantity > 0);
     setCartItems(updated);
     setNotificationMessage("Quantity decreased");
-    setNotificationType("info"); // Changed to info
+    setNotificationType("info");
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 1500);
   };
@@ -78,7 +78,7 @@ const Cart = () => {
     const updated = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updated);
     setNotificationMessage("Item removed from cart");
-    setNotificationType("error"); // Changed to error
+    setNotificationType("error");
     setShowNotification(true);
     setTimeout(() => {
       setShowNotification(false);
@@ -87,7 +87,7 @@ const Cart = () => {
   };
 
   const handleCheckout = async () => {
-    setIsLoading(true); // Start loading for checkout
+    setIsLoading(true);
     try {
       for (const item of cartItems) {
         const originalProduct = data.find((p) => p.id === item.id);
@@ -140,13 +140,13 @@ const Cart = () => {
       setTimeout(() => setShowNotification(false), 3000);
       console.error("Checkout failed →", error?.response?.data || error.message);
     } finally {
-      setIsLoading(false); // End loading for checkout
+      setIsLoading(false);
     }
   };
 
   return (
     <>
-      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} /> {/* Changed component name */}
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} />
       <div className="cart-container">
         <div className="shopping-cart">
           <div className="title">Shopping Bag</div>
@@ -156,7 +156,7 @@ const Cart = () => {
             </div>
           ) : (
             <>
-              <ul className="cart-items"> {/* Added ul for list */}
+              <ul className="cart-items">
                 {cartItems.map((item) => (
                   <li key={item.id} className="cart-item">
                     <div className="item">
@@ -189,11 +189,11 @@ const Cart = () => {
                 ))}
               </ul>
               <div className="total">Total: ₹{totalPrice}</div>
-              <div className="checkout-button"> {/* Wrapper for button */}
+              <div className="checkout-button">
                 <button
                   className="btn"
                   onClick={() => setShowModal(true)}
-                  disabled={isLoading} // Disable button when loading
+                  disabled={isLoading}
                 >
                   {isLoading ? "Processing..." : "Checkout"}
                 </button>
@@ -207,7 +207,7 @@ const Cart = () => {
           cartItems={cartItems}
           totalPrice={totalPrice}
           handleCheckout={handleCheckout}
-          isLoading={isLoading} // Pass loading state to popup
+          isLoading={isLoading}
         />
       </div>
     </>

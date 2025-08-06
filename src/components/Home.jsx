@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 import AppContext from "../Context/Context";
 import unplugged from "../assets/unplugged.png";
 import placeholder from "../assets/placeholder.png";
-import AppNotification from "./AppNotification"; 
-import '../styles/Home.css'
+import AppNotification from "./AppNotification";
+import '../styles/Home.css';
 
 const Home = ({ selectedCategory }) => {
-  const { data, isError, addToCart, refreshData, isLoadingData } = useContext(AppContext); 
+  const { data, isError, addToCart, refreshData, isLoadingData } = useContext(AppContext);
   const [products, setProducts] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
-  const [showNotification, setShowNotification] = useState(false); 
-  const [notificationMessage, setNotificationMessage] = useState(""); 
-  const [notificationType, setNotificationType] = useState("success"); 
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationType, setNotificationType] = useState("success");
 
   useEffect(() => {
     if (!isDataFetched) {
@@ -37,56 +37,50 @@ const Home = ({ selectedCategory }) => {
 
   const handleAddToCart = (product) => {
     addToCart(product);
-    setNotificationMessage(`${product.name} added to cart!`); 
-    setNotificationType("success"); // Set notification type
-    setShowNotification(true); 
+    setNotificationMessage(`${product.name} added to cart!`);
+    setNotificationType("success");
+    setShowNotification(true);
 
     setTimeout(() => {
       setShowNotification(false);
-      setNotificationMessage(""); // Clear message
-    }, 3000); 
+      setNotificationMessage("");
+    }, 3000);
   };
 
   if (isError) {
     return (
       <h2 className="text-center" style={{ padding: "18rem" }}>
         <img src={unplugged} alt="Error" style={{ width: "100px", height: "100px" }} />
-        <p style={{color: 'var(--para-clr)'}}>Error fetching data. Please try again later.</p> {/* Added text for error */}
+        <p style={{color: 'var(--para-clr)'}}>Error fetching data. Please try again later.</p>
       </h2>
     );
   }
 
-  // Display loading message when data is being fetched
   if (isLoadingData) {
     return (
       <div className="text-center" style={{ padding: "18rem", color: 'var(--para-clr)' }}>
-        loading..
+        <h2>Fetching data from backend, it's a free server so it's taking time.</h2>
+        <h3>Thank you for your patience.</h3>
       </div>
     );
   }
 
   return (
     <>
-      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} /> {/* Changed component name */}
-      <div
-        className="home-grid-container" // Changed class name to match new CSS
-      >
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} />
+      <div className="home-grid-container">
         {filteredProducts.length === 0 ? (
-          <h2
-            className="no-products-message" // Changed class name to match new CSS
-          >
-            Loading..
-          </h2>
+          <h2 className="no-products-message">No Products Available</h2>
         ) : (
           filteredProducts.map((product) => {
             const { id, brand, name, price, available, imageUrl } = product;
 
             return (
                 <div
-                  className={`product-card ${!available ? "out-of-stock" : ""}`} // Changed class name and added out-of-stock class
+                  className={`product-card ${!available ? "out-of-stock" : ""}`}
                   key={id}
                 >
-                <Link to={`/product/${id}`} className="product-card-link"> {/* Changed class name */}
+                <Link to={`/product/${id}`} className="product-card-link">
                   <img
                     src={imageUrl}
                     alt={name}
@@ -94,33 +88,25 @@ const Home = ({ selectedCategory }) => {
                       e.target.onerror = null;
                       e.target.src = placeholder;
                     }}
-                    className="product-card-image" // Changed class name
+                    className="product-card-image"
                   />
-                  <div
-                    className="product-card-body" // Changed class name
-                  >
+                  <div className="product-card-body">
                     <div>
-                      <h5
-                        className="product-card-title" // Changed class name
-                      >
+                      <h5 className="product-card-title">
                         {name.toUpperCase()}
                       </h5>
-                      <i
-                        className="product-card-brand" // Changed class name
-                      >
+                      <i className="product-card-brand">
                         {"~ " + brand}
                       </i>
                     </div>
                     <hr className="hr-line" />
                     <div className="home-cart-price">
-                      <h5
-                        className="product-card-price" // Changed class name
-                      >
+                      <h5 className="product-card-price">
                         <span>₹{price}</span>
                       </h5>
                     </div>
                     <button
-                      className="btn product-card-button" // Changed class name
+                      className="btn product-card-button"
                       onClick={(e) => {
                         e.preventDefault();
                         if (available) handleAddToCart(product);

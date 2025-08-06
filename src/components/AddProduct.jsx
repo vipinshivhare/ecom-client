@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import AppNotification from "./AppNotification"; // Changed import from Notification to AppNotification
+import AppNotification from "./AppNotification";
 import "../styles/AddProduct.css"
 
 const AddProduct = () => {
@@ -80,7 +80,7 @@ const AddProduct = () => {
 
   return (
     <div className="add-product-container">
-      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} /> {/* Changed component name */}
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} />
       <div className="add-product-center-container">
         <form className="row g-3 pt-5" onSubmit={submitHandler}>
           <div className="col-md-6">
@@ -181,6 +181,13 @@ const AddProduct = () => {
 
           <div className="col-md-4">
             <label className="form-label"><h6>Image</h6></label>
+            {image && (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Product Preview"
+                className="add-product-image-preview"
+              />
+            )}
             <input
               className="form-control"
               type="file"

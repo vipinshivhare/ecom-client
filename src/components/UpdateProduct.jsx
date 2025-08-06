@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import AppNotification from "./AppNotification";
 import '../styles/UpdateProduct.css';
 
 const UpdateProduct = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState({});
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
   const [updateProduct, setUpdateProduct] = useState({
     id: null,
     name: "",
@@ -15,75 +17,99 @@ const UpdateProduct = () => {
     price: "",
     category: "",
     releaseDate: "",
-    productAvailable: false,
-    stockQuantity: "",
+    available: false,
+    quantity: "",
   });
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationType, setNotificationType] = useState("success");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           `https://ecom-serverside.onrender.com/api/product/${id}`
         );
-
         setProduct(response.data);
-      
+        
+        setUpdateProduct({
+          id: response.data.id,
+          name: response.data.name,
+          description: response.data.description,
+          brand: response.data.brand,
+          price: Number(response.data.price),
+          category: response.data.category,
+          releaseDate: response.data.releaseDate ? new Date(response.data.releaseDate).toISOString().split('T')[0] : '',
+          available: response.data.available,
+          quantity: Number(response.data.quantity),
+        });
+
         const responseImage = await axios.get(
           `https://ecom-serverside.onrender.com/api/product/${id}/image`,
           { responseType: "blob" }
         );
-       const imageFile = await converUrlToFile(responseImage.data,response.data.imageName)
-        setImage(imageFile);     
-        setUpdateProduct(response.data);
+        const imageFile = new File([responseImage.data], response.data.imageName || "product_image.jpg", { type: responseImage.data.type });
+        setImage(imageFile);
       } catch (error) {
         console.error("Error fetching product:", error);
+        setNotificationMessage("Error loading product for update.");
+        setNotificationType("error");
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchProduct();
   }, [id]);
 
-  useEffect(() => {
-    console.log("image Updated", image);
-  }, [image]);
-
-
-
-  const converUrlToFile = async(blobData, fileName) => {
-    const file = new File([blobData], fileName, { type: blobData.type });
-    return file;
-  }
- 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("images", image)
-    console.log("productsdfsfsf", updateProduct)
-    const updatedProduct = new FormData();
-    updatedProduct.append("imageFile", image);
-    updatedProduct.append(
-      "product",
-      new Blob([JSON.stringify(updateProduct)], { type: "application/json" })
-    );
-  
+    setIsLoading(true);
 
-  console.log("formData : ", updatedProduct)
-    axios
-      .put(`https://ecom-serverside.onrender.com/api/product/${id}`, updatedProduct, {
+    const updatedProductData = {
+      ...updateProduct,
+      price: Number(updateProduct.price),
+      quantity: Number(updateProduct.quantity),
+      available: Boolean(updateProduct.available),
+      releaseDate: updateProduct.releaseDate ? updateProduct.releaseDate : null,
+    };
+
+    const formData = new FormData();
+    if (image) {
+      formData.append("imageFile", image);
+    }
+    formData.append(
+      "product",
+      new Blob([JSON.stringify(updatedProductData)], { type: "application/json" })
+    );
+
+    try {
+      await axios.put(`https://ecom-serverside.onrender.com/api/product/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
-      .then((response) => {
-        console.log("Product updated successfully:", updatedProduct);
-        alert("Product updated successfully!");
-      })
-      .catch((error) => {
-        console.error("Error updating product:", error);
-        console.log("product unsuccessfull update",updateProduct)
-        alert("Failed to update product. Please try again.");
       });
+      setNotificationMessage("Product updated successfully!");
+      setNotificationType("success");
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+        navigate(`/product/${id}`);
+      }, 2000);
+    } catch (error) {
+      console.error("Error updating product:", error);
+      setNotificationMessage("Failed to update product. Please try again.");
+      setNotificationType("error");
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
+    } finally {
+      setIsLoading(false);
+    }
   };
- 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,15 +118,24 @@ const UpdateProduct = () => {
       [name]: value,
     });
   };
-  
+
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
-  
+
+  if (isLoading) {
+    return (
+      <div className="text-center" style={{ padding: "18rem", color: 'var(--para-clr)' }}>
+        <h2>Fetching data from backend, it's a free server so it's taking time.</h2>
+        <h3>Thank you for your patience.</h3>
+      </div>
+    );
+  }
 
   return (
-    <div className="update-product-container" >
-      <div className="center-container"style={{marginTop:"7rem"}}>
+    <div className="update-product-page-container">
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} />
+      <div className="update-product-center-container">
         <h1>Update Product</h1>
         <form className="row g-3 pt-1" onSubmit={handleSubmit}>
           <div className="col-md-6">
@@ -110,10 +145,11 @@ const UpdateProduct = () => {
             <input
               type="text"
               className="form-control"
-              placeholder={product.name}
+              placeholder="Product Name"
               value={updateProduct.name}
               onChange={handleChange}
               name="name"
+              required
             />
           </div>
           <div className="col-md-6">
@@ -124,10 +160,10 @@ const UpdateProduct = () => {
               type="text"
               name="brand"
               className="form-control"
-              placeholder={product.brand}
+              placeholder="Brand"
               value={updateProduct.brand}
               onChange={handleChange}
-              id="brand"
+              required
             />
           </div>
           <div className="col-12">
@@ -137,14 +173,14 @@ const UpdateProduct = () => {
             <input
               type="text"
               className="form-control"
-              placeholder={product.description}
+              placeholder="Product Description"
               name="description"
               onChange={handleChange}
               value={updateProduct.description}
-              id="description"
+              required
             />
           </div>
-          <div className="col-5">
+          <div className="col-md-5">
             <label className="form-label">
               <h6>Price</h6>
             </label>
@@ -153,9 +189,9 @@ const UpdateProduct = () => {
               className="form-control"
               onChange={handleChange}
               value={updateProduct.price}
-              placeholder={product.price}
+              placeholder="Eg: 1000"
               name="price"
-              id="price"
+              required
             />
           </div>
           <div className="col-md-6">
@@ -167,15 +203,15 @@ const UpdateProduct = () => {
               value={updateProduct.category}
               onChange={handleChange}
               name="category"
-              id="category"
+              required
             >
               <option value="">Select category</option>
-              <option value="laptop">Laptop</option>
-              <option value="headphone">Headphone</option>
-              <option value="mobile">Mobile</option>
-              <option value="electronics">Electronics</option>
-              <option value="toys">Toys</option>
-              <option value="fashion">Fashion</option>
+              <option value="Laptop">Laptop</option>
+              <option value="Headphone">Headphone</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Toys">Toys</option>
+              <option value="Fashion">Fashion</option>
             </select>
           </div>
 
@@ -187,34 +223,28 @@ const UpdateProduct = () => {
               type="number"
               className="form-control"
               onChange={handleChange}
-              placeholder={product.stockQuantity}
-              value={updateProduct.stockQuantity}
-              name="stockQuantity"
-              id="stockQuantity"
+              placeholder="Stock Remaining"
+              value={updateProduct.quantity}
+              name="quantity"
+              required
             />
           </div>
           <div className="col-md-8">
             <label className="form-label">
               <h6>Image</h6>
             </label>
-            <img
-              src={image ? URL.createObjectURL(image) : "Image unavailable"}
-              alt={product.imageName}
-              style={{
-                width: "100%",
-                height: "180px",
-                objectFit: "cover",
-                padding: "5px",
-                margin: "0",
-              }}
-            />
+            {image && (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Product Preview"
+                className="product-image-preview"
+              />
+            )}
             <input
               className="form-control"
               type="file"
               onChange={handleImageChange}
-              placeholder="Upload image"
-              name="imageUrl"
-              id="imageUrl"
+              name="imageFile"
             />
           </div>
           <div className="col-12">
@@ -222,11 +252,10 @@ const UpdateProduct = () => {
               <input
                 className="form-check-input"
                 type="checkbox"
-                name="productAvailable"
-                id="gridCheck"
-                checked={updateProduct.productAvailable}
+                name="available"
+                checked={updateProduct.available}
                 onChange={(e) =>
-                  setUpdateProduct({ ...updateProduct, productAvailable: e.target.checked })
+                  setUpdateProduct({ ...updateProduct, available: e.target.checked })
                 }
               />
               <label className="form-check-label">Product Available</label>
@@ -234,8 +263,8 @@ const UpdateProduct = () => {
           </div>
 
           <div className="col-12">
-            <button type="submit" className="btn btn-primary">
-              Submit
+            <button type="submit" className="btn btn-primary" disabled={isLoading}>
+              {isLoading ? "Updating..." : "Submit Update"}
             </button>
           </div>
         </form>

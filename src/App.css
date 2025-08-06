@@ -25,7 +25,7 @@
   --body_background: white;
   --navbar_background: white;
   --navbar_text : black;
-  --body_color : white; /* This seems to be used for text color in some places, adjusting to black for light theme */
+  --body_color : white;
   --link_color : rgb(0, 0, 0);
   --link_hover_color : rgb(35, 35, 35);
   --link_visited_color : purple;
@@ -39,7 +39,7 @@
   --category-hvr: rgb(200, 200, 200);
   --search_result-bg: rgb(239, 239, 239);
   --hr_line_card: black;
-  --color-text: #1e293b; /* Ensure text is dark in light theme */
+  --color-text: #1e293b;
 }
 
 .dark-theme {
@@ -47,7 +47,7 @@
   --body_background: #1f1f1f;
   --navbar_background: black;
   --navbar_text : white;
-  --body_color : black; /* This seems to be used for text color in some places, adjusting to white for dark theme */
+  --body_color : black;
   --link_color : rgb(255, 255, 255);
   --link_hover_color : rgb(137, 137, 137);
   --link_visited_color : purple;
@@ -61,7 +61,7 @@
   --category-hvr: rgb(115, 115, 115);
   --search_result-bg: rgb(49, 49, 49);
   --hr_line_card: rgb(255, 255, 255);
-  --color-text: #e2e8f0; /* Ensure text is light in dark theme */
+  --color-text: #e2e8f0;
 }
 
 /* Global HTML/Body/Root Styles */
@@ -74,38 +74,38 @@ html, body, #root {
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: var(--body_background); /* Use body_background for theme switching */
+  background: var(--body_background);
   color: var(--color-text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   max-width: 100%;
   margin: 0 auto;
   background-color: var(--root_background);
-  min-height: 100vh; /* Ensure root fills viewport height */
+  min-height: 100vh;
 }
 
 /* General Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  color: var(--para-clr); /* Use para-clr for theme switching */
+  color: var(--para-clr);
   margin-bottom: 0.5em;
 }
 
 p {
-  color: var(--para-clr); /* Use para-clr for theme switching */
+  color: var(--para-clr);
 }
 
 a {
-  color: var(--link_color); /* Use link_color for theme switching */
+  color: var(--link_color);
   text-decoration: none;
   transition: color var(--transition);
 }
 a:hover {
-  color: var(--link_hover_color); /* Use link_hover_color for theme switching */
+  color: var(--link_hover_color);
 }
 
 /* Modern Button Styles */
@@ -132,7 +132,8 @@ button:active, .btn:active {
   transform: scale(0.98);
 }
 button:disabled, .btn:disabled {
-  background: var(--color-secondary);
+  background: #ccc;
+  color: #666;
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -145,7 +146,7 @@ input, select, textarea {
   font-size: 1rem;
   background: var(--color-surface);
   color: var(--color-text);
-  transition: border var(--transition), box-shadow var(--transition);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 }
 input:focus, select:focus, textarea:focus {

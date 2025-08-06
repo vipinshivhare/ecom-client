@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import AppContext from "../Context/Context";
 import axios from "../axios";
 import placeholder from "../assets/placeholder.png";
-import AppNotification from "./AppNotification"; // Changed import from Notification to AppNotification
+import AppNotification from "./AppNotification";
 import '../styles/Product.css';
 
 const Product = () => {
@@ -80,7 +80,8 @@ const Product = () => {
   if (isLoading) {
     return (
       <div className="text-center" style={{ padding: "18rem", color: 'var(--para-clr)' }}>
-        Loading...
+        <h2>Fetching data from backend, it's a free server so it's taking time.</h2>
+        <h3>Thank you for your patience.</h3>
       </div>
     );
   }
@@ -95,7 +96,7 @@ const Product = () => {
 
   return (
     <>
-      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} /> {/* Changed component name */}
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} />
       <div className="product-detail-page">
         <div className="product-detail-container">
           <div className="product-left-column">

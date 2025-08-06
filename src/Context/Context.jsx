@@ -8,15 +8,15 @@ const AppContext = createContext({
   addToCart: (product) => {},
   removeFromCart: (productId) => {},
   refreshData:() =>{},
-  updateStockQuantity: (productId, newQuantity) =>{}
-  
+  clearCart: () => {},
+  isLoadingData: false,
 });
 
 export const AppProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState("");
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
-
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
   const addToCart = (product) => {
     const existingProductIndex = cart.findIndex((item) => item.id === product.id);
@@ -36,27 +36,29 @@ export const AppProvider = ({ children }) => {
   };
 
   const removeFromCart = (productId) => {
-    console.log("productID",productId)
     const updatedCart = cart.filter((item) => item.id !== productId);
     setCart(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
-    console.log("CART",cart)
   };
 
   const refreshData = async () => {
+    setIsLoadingData(true);
     try {
       const response = await axios.get("/products");
       setData(response.data);
+      setIsError("");
     } catch (error) {
       setIsError(error.message);
+      setData([]);
+    } finally {
+      setIsLoadingData(false);
     }
   };
 
   const clearCart = () => {
-  setCart([]);
-  localStorage.removeItem('cart');
-};
-
+    setCart([]);
+    localStorage.removeItem('cart');
+  };
   
   useEffect(() => {
     refreshData();
@@ -67,7 +69,7 @@ export const AppProvider = ({ children }) => {
   }, [cart]);
   
   return (
-    <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart,refreshData, clearCart  }}>
+    <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart, refreshData, clearCart, isLoadingData }}>
       {children}
     </AppContext.Provider>
   );

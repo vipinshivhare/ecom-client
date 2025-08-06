@@ -1,12 +1,12 @@
 .add-product-container {
   background-color: var(--body_background);
-  color: var(--para-clr); /* Use para-clr for text */
+  color: var(--para-clr);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* Add some padding for smaller screens */
-  box-sizing: border-box; /* Include padding in element's total width and height */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .add-product-center-container {
@@ -15,7 +15,7 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow-card);
   width: 100%;
-  max-width: 700px; /* Limit max width for better readability */
+  max-width: 700px;
   box-sizing: border-box;
 }
 
@@ -56,36 +56,47 @@
   color: var(--para-clr);
 }
 
+.add-product-image-preview {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  background-color: #f1f5f9;
+  padding: 5px;
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
 .add-product-center-container .btn {
-  width: auto; /* Allow button to size based on content */
+  width: auto;
   padding: 12px 32px;
   min-width: 130px;
   border-radius: 10px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  background: linear-gradient(90deg, #34d399 0%, #ffe066 40%, #60a5fa 80%, #fb7185 100%);
+  background: linear-gradient(90deg, rgba(52,211,153,0.85) 0%, rgba(255,224,102,0.85) 30%, rgba(96,165,250,0.85) 65%, rgba(251,113,133,0.85) 100%);
   color: #fff;
   border: none;
   box-shadow: 0 2px 8px rgba(37,99,235,0.10);
-  transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
-  margin-top: 20px; /* Space above button */
+  transition: background 0.18s, box-shadow 0.18s, transform 0.18s, color 0.18s; /* Added color transition */
 }
 
 .add-product-center-container .btn:hover {
   box-shadow: 0 4px 16px rgba(37,99,235,0.15);
   transform: translateY(-2px);
+  color: black; /* Text color on hover */
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .add-product-center-container {
     padding: 20px;
-    margin-top: 80px; /* Adjust for fixed navbar */
+    margin-top: 80px;
   }
   .add-product-center-container .col-md-6,
   .add-product-center-container .col-md-5,
   .add-product-center-container .col-md-4 {
-    width: 100%; /* Stack columns on small screens */
+    width: 100%;
   }
 }
 
@@ -94,7 +105,7 @@
     padding: 15px;
   }
   .add-product-center-container .btn {
-    width: 100%; /* Full width button on very small screens */
+    width: 100%;
     padding: 10px 20px;
   }
 }
