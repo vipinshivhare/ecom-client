@@ -60,7 +60,7 @@ const Home = ({ selectedCategory }) => {
   if (isLoadingData) {
     return (
       <div className="text-center" style={{ padding: "18rem", color: 'var(--para-clr)' }}>
-        loading
+        loading..
       </div>
     );
   }
@@ -75,7 +75,7 @@ const Home = ({ selectedCategory }) => {
           <h2
             className="no-products-message" // Changed class name to match new CSS
           >
-            LOADING..
+            Loading..
           </h2>
         ) : (
           filteredProducts.map((product) => {
