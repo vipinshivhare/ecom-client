@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Notification from "./Notification";
+import AppNotification from "./AppNotification"; // Changed import from Notification to AppNotification
+import "../styles/AddProduct.css"
 
 const AddProduct = () => {
   const [product, setProduct] = useState({
@@ -18,6 +19,7 @@ const AddProduct = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationType, setNotificationType] = useState("success");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +32,7 @@ const AddProduct = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const fixedProduct = {
       ...product,
@@ -57,19 +60,28 @@ const AddProduct = () => {
         setNotificationType("success");
         setShowNotification(true);
         setTimeout(() => setShowNotification(false), 3000);
+        setProduct({
+          name: "", brand: "", description: "", price: "", category: "",
+          quantity: "", releaseDate: "", available: true,
+        });
+        setImage(null);
       })
       .catch((error) => {
         setNotificationMessage("Error adding product");
         setNotificationType("error");
         setShowNotification(true);
         setTimeout(() => setShowNotification(false), 3000);
+        console.error("Error adding product:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
   return (
-    <div className="container">
-      <Notification show={showNotification} message={notificationMessage} type={notificationType} />
-      <div className="center-container">
+    <div className="add-product-container">
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} /> {/* Changed component name */}
+      <div className="add-product-center-container">
         <form className="row g-3 pt-5" onSubmit={submitHandler}>
           <div className="col-md-6">
             <label className="form-label"><h6>Name</h6></label>
@@ -196,22 +208,9 @@ const AddProduct = () => {
             <button
               type="submit"
               className="btn"
-              style={{
-                fontSize: '1.08rem',
-                padding: '12px 32px',
-                minWidth: 130,
-                borderRadius: 10,
-                fontWeight: 700,
-                letterSpacing: '0.5px',
-                margin: 0,
-                background: 'linear-gradient(90deg, #34d399 0%, #ffe066 40%, #60a5fa 80%, #fb7185 100%)',
-                color: '#fff',
-                border: 'none',
-                boxShadow: '0 2px 8px rgba(37,99,235,0.10)',
-                transition: 'background 0.18s, box-shadow 0.18s',
-              }}
+              disabled={isLoading}
             >
-              Add Product
+              {isLoading ? "Adding Product..." : "Add Product"}
             </button>
           </div>
         </form>

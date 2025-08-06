@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 import AppContext from "../Context/Context";
 import unplugged from "../assets/unplugged.png";
 import placeholder from "../assets/placeholder.png";
-import Notification from "./Notification";
+import AppNotification from "./AppNotification"; 
+import '../styles/Home.css'
 
 const Home = ({ selectedCategory }) => {
-  const { data, isError, addToCart, refreshData } = useContext(AppContext);
+  const { data, isError, addToCart, refreshData, isLoadingData } = useContext(AppContext); 
   const [products, setProducts] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [showNotification, setShowNotification] = useState(false); 
   const [notificationMessage, setNotificationMessage] = useState(""); 
+  const [notificationType, setNotificationType] = useState("success"); 
 
   useEffect(() => {
     if (!isDataFetched) {
@@ -34,19 +36,14 @@ const Home = ({ selectedCategory }) => {
     : products;
 
   const handleAddToCart = (product) => {
-
     addToCart(product);
     setNotificationMessage(`${product.name} added to cart!`); 
+    setNotificationType("success"); // Set notification type
     setShowNotification(true); 
-
-    console.log("Notification state set to true.");
 
     setTimeout(() => {
       setShowNotification(false);
       setNotificationMessage(""); // Clear message
-   
-      console.log("Notification hidden after timeout.");
-     
     }, 3000); 
   };
 
@@ -54,33 +51,31 @@ const Home = ({ selectedCategory }) => {
     return (
       <h2 className="text-center" style={{ padding: "18rem" }}>
         <img src={unplugged} alt="Error" style={{ width: "100px", height: "100px" }} />
+        <p style={{color: 'var(--para-clr)'}}>Error fetching data. Please try again later.</p> {/* Added text for error */}
       </h2>
+    );
+  }
+
+  // Display loading message when data is being fetched
+  if (isLoadingData) {
+    return (
+      <div className="text-center" style={{ padding: "18rem", color: 'var(--para-clr)' }}>
+        loading
+      </div>
     );
   }
 
   return (
     <>
-      <Notification show={showNotification} message={notificationMessage} type="success" />
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} /> {/* Changed component name */}
       <div
-        className="grid"
-        style={{
-          marginTop: "64px",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "20px",
-          padding: "20px",
-        }}
+        className="home-grid-container" // Changed class name to match new CSS
       >
         {filteredProducts.length === 0 ? (
           <h2
-            className="text-center"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            className="no-products-message" // Changed class name to match new CSS
           >
-            No Products Available
+            LOADING..
           </h2>
         ) : (
           filteredProducts.map((product) => {
@@ -88,22 +83,10 @@ const Home = ({ selectedCategory }) => {
 
             return (
                 <div
-                  className="card mb-3"
-                  style={{
-                    width: "250px",
-                    height: "400px",
-                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                    borderRadius: "10px",
-                    overflow: "hidden",
-                    backgroundColor: available ? "#fff" : "#ccc",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
-                    alignItems: "stretch",
-                  }}
+                  className={`product-card ${!available ? "out-of-stock" : ""}`} // Changed class name and added out-of-stock class
                   key={id}
                 >
-                <Link to={`/product/${id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <Link to={`/product/${id}`} className="product-card-link"> {/* Changed class name */}
                   <img
                     src={imageUrl}
                     alt={name}
@@ -111,64 +94,33 @@ const Home = ({ selectedCategory }) => {
                       e.target.onerror = null;
                       e.target.src = placeholder;
                     }}
-                    style={{
-                      width: "100%",
-                      height: "150px",
-                      objectFit: "cover",
-                      padding: "5px",
-                      margin: "0",
-                      borderRadius: "10px 10px 10px 10px",
-                    }}
+                    className="product-card-image" // Changed class name
                   />
                   <div
-                    className="card-body"
-                    style={{
-                      flexGrow: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      padding: "10px",
-                    }}
+                    className="product-card-body" // Changed class name
                   >
                     <div>
                       <h5
-                        className="card-title"
-                        style={{ margin: "0 0 10px 0", fontSize: "1.2rem" }}
+                        className="product-card-title" // Changed class name
                       >
                         {name.toUpperCase()}
                       </h5>
                       <i
-                        className="card-brand"
-                        style={{ fontStyle: "italic", fontSize: "0.8rem" }}
+                        className="product-card-brand" // Changed class name
                       >
                         {"~ " + brand}
                       </i>
                     </div>
-                    <hr className="hr-line" style={{ margin: "10px 0" }} />
+                    <hr className="hr-line" />
                     <div className="home-cart-price">
                       <h5
-                        className="card-text"
-                        style={{
-                          fontWeight: 700,
-                          fontSize: '1.1rem',
-                          color: 'var(--color-primary)'
-                        }}
+                        className="product-card-price" // Changed class name
                       >
-                        <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>₹{price}</span>
+                        <span>₹{price}</span>
                       </h5>
                     </div>
                     <button
-                      className="btn"
-                      style={{
-                        marginTop: 12,
-                        background: 'linear-gradient(90deg, #34d399 0%, #ffe066 40%, #60a5fa 80%, #fb7185 100%)',
-                        color: '#fff',
-                        fontWeight: 700,
-                        border: 'none',
-                        boxShadow: '0 2px 8px rgba(37,99,235,0.10)',
-                        letterSpacing: '0.5px',
-                        transition: 'background 0.18s, box-shadow 0.18s',
-                      }}
+                      className="btn product-card-button" // Changed class name
                       onClick={(e) => {
                         e.preventDefault();
                         if (available) handleAddToCart(product);

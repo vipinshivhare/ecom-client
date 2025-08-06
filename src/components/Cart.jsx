@@ -2,7 +2,9 @@ import React, { useContext, useState, useEffect } from "react";
 import AppContext from "../Context/Context";
 import axios from "../axios";
 import CheckoutPopup from "./CheckoutPopup";
-import Notification from "./Notification";
+import AppNotification from "./AppNotification"; // Changed import from Notification to AppNotification
+import placeholder from "../assets/placeholder.png"; // Ensure placeholder is imported
+import '../styles/Cart.css';
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart, data } = useContext(AppContext);
@@ -11,6 +13,8 @@ const Cart = () => {
   const [showModal, setShowModal] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationType, setNotificationType] = useState("success"); // Added notification type
+  const [isLoading, setIsLoading] = useState(false); // New loading state for checkout
 
   useEffect(() => {
     const updateCartItemsWithImageUrl = () => {
@@ -38,11 +42,13 @@ const Cart = () => {
         const originalProduct = data.find((p) => p.id === itemId);
         if (originalProduct && item.quantity < originalProduct.quantity) {
           setNotificationMessage("Quantity increased");
+          setNotificationType("info"); // Changed to info
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 1500);
           return { ...item, quantity: item.quantity + 1 };
         } else {
           setNotificationMessage("Cannot add more than available stock");
+          setNotificationType("warning"); // Changed to warning
           setShowNotification(true);
           setTimeout(() => setShowNotification(false), 2000);
         }
@@ -62,6 +68,7 @@ const Cart = () => {
       .filter((item) => item.quantity > 0);
     setCartItems(updated);
     setNotificationMessage("Quantity decreased");
+    setNotificationType("info"); // Changed to info
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 1500);
   };
@@ -71,6 +78,7 @@ const Cart = () => {
     const updated = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updated);
     setNotificationMessage("Item removed from cart");
+    setNotificationType("error"); // Changed to error
     setShowNotification(true);
     setTimeout(() => {
       setShowNotification(false);
@@ -79,6 +87,7 @@ const Cart = () => {
   };
 
   const handleCheckout = async () => {
+    setIsLoading(true); // Start loading for checkout
     try {
       for (const item of cartItems) {
         const originalProduct = data.find((p) => p.id === item.id);
@@ -118,6 +127,7 @@ const Cart = () => {
       setCartItems([]);
       setShowModal(false);
       setNotificationMessage("Order placed successfully!");
+      setNotificationType("success");
       setShowNotification(true);
       setTimeout(() => {
         setShowNotification(false);
@@ -125,75 +135,69 @@ const Cart = () => {
       }, 3000);
     } catch (error) {
       setNotificationMessage("Checkout failed!");
+      setNotificationType("error");
       setShowNotification(true);
       setTimeout(() => setShowNotification(false), 3000);
       console.error("Checkout failed →", error?.response?.data || error.message);
+    } finally {
+      setIsLoading(false); // End loading for checkout
     }
   };
 
   return (
     <>
-      <Notification show={showNotification} message={notificationMessage} type="success" />
+      <AppNotification show={showNotification} message={notificationMessage} type={notificationType} /> {/* Changed component name */}
       <div className="cart-container">
         <div className="shopping-cart">
           <div className="title">Shopping Bag</div>
           {cartItems.length === 0 ? (
-            <div className="empty" style={{ textAlign: "left", padding: "2rem" }}>
+            <div className="empty">
               <h4>Your cart is empty</h4>
             </div>
           ) : (
             <>
-              {cartItems.map((item) => (
-                <li key={item.id} className="cart-item">
-                  <div className="item" style={{ display: "flex", alignItems: "center" }}>
-                    <div>
-                      <img
-                        src={item.imageUrl}
-                        alt={item.name}
-                        className="cart-item-image"
-                        style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                      />
-                    </div>
-                    <div className="description">
-                      <span>{item.brand}</span>
-                      <span>{item.name}</span>
-                    </div>
-                    <div className="quantity">
-                      <button className="plus-btn" onClick={() => handleIncreaseQuantity(item.id)}>
-                        +
+              <ul className="cart-items"> {/* Added ul for list */}
+                {cartItems.map((item) => (
+                  <li key={item.id} className="cart-item">
+                    <div className="item">
+                      <div>
+                        <img
+                          src={item.imageUrl}
+                          alt={item.name}
+                          className="cart-item-image"
+                        />
+                      </div>
+                      <div className="description">
+                        <span>{item.brand}</span>
+                        <span>{item.name}</span>
+                      </div>
+                      <div className="quantity">
+                        <button className="plus-btn" onClick={() => handleIncreaseQuantity(item.id)}>
+                          +
+                        </button>
+                        <input type="button" value={item.quantity} readOnly />
+                        <button className="minus-btn" onClick={() => handleDecreaseQuantity(item.id)}>
+                          -
+                        </button>
+                      </div>
+                      <div className="total-price">₹{item.price * item.quantity}</div>
+                      <button className="remove-btn" onClick={() => handleRemoveFromCart(item.id)}>
+                        🗑️
                       </button>
-                      <input type="button" value={item.quantity} readOnly />
-                      <button className="minus-btn" onClick={() => handleDecreaseQuantity(item.id)}>
-                        -
-                      </button>
                     </div>
-                    <div className="total-price">₹{item.price * item.quantity}</div>
-                    <button className="remove-btn" onClick={() => handleRemoveFromCart(item.id)}>
-                      🗑️
-                    </button>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                ))}
+              </ul>
               <div className="total">Total: ₹{totalPrice}</div>
-              <button
-                className="btn"
-                style={{
-                  width: '100%',
-                  background: 'linear-gradient(90deg, #34d399 0%, #ffe066 40%, #60a5fa 80%, #fb7185 100%)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 10,
-                  fontWeight: 700,
-                  fontSize: 20,
-                  padding: '14px 0',
-                  marginTop: 18,
-                  boxShadow: '0 2px 8px rgba(37,99,235,0.10)',
-                  transition: 'background 0.18s, box-shadow 0.18s',
-                }}
-                onClick={() => setShowModal(true)}
-              >
-                Checkout
-              </button>
+              <div className="checkout-button"> {/* Wrapper for button */}
+                <button
+                  className="btn"
+                  onClick={() => setShowModal(true)}
+                  disabled={isLoading} // Disable button when loading
+                >
+                  {isLoading ? "Processing..." : "Checkout"}
+                </button>
+              </div>
             </>
           )}
         </div>
@@ -203,6 +207,7 @@ const Cart = () => {
           cartItems={cartItems}
           totalPrice={totalPrice}
           handleCheckout={handleCheckout}
+          isLoading={isLoading} // Pass loading state to popup
         />
       </div>
     </>

@@ -1,0 +1,136 @@
+/* Styling for the Modal component from react-bootstrap */
+.modal-content {
+  background-color: var(--cart_body_color); /* Use cart_body_color for modal background */
+  color: var(--para-clr); /* Use para-clr for text */
+  border-radius: var(--radius);
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  backdrop-filter: blur(8px);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--color-border);
+  padding: 20px;
+}
+
+.modal-title {
+  color: var(--para-clr);
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.modal-header .btn-close {
+  color: var(--para-clr); /* Adjust close button color for theme */
+  filter: var(--btn-close-filter, none); /* For dark theme, invert filter */
+}
+.dark-theme .modal-header .btn-close {
+  filter: invert(1); /* Invert color for dark theme close button */
+}
+
+
+.modal-body {
+  padding: 20px;
+}
+
+.checkout-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between checkout items */
+}
+
+.checkout-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.checkout-item:last-child {
+  border-bottom: none; /* No border for the last item */
+}
+
+.checkout-item img {
+  width: 120px; /* Adjusted image size for popup */
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.checkout-item div {
+  flex-grow: 1;
+}
+
+.checkout-item p {
+  color: var(--para-clr); /* Ensure text color respects theme */
+  margin: 0;
+  font-size: 16px;
+}
+
+.checkout-item p b {
+  font-size: 18px;
+  color: var(--para-clr);
+}
+
+.checkout-items .total-price-display {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--para-clr); /* Ensure total price color respects theme */
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-border);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.modal-footer .btn {
+  background: linear-gradient(90deg, #34d399 0%, #ffe066 40%, #60a5fa 80%, #fb7185 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 10px 28px;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+  transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+}
+
+.modal-footer .btn:hover {
+  box-shadow: 0 4px 16px rgba(37,99,235,0.15);
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .modal-content {
+    margin: 15px;
+  }
+  .modal-title {
+    font-size: 20px;
+  }
+  .checkout-item {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .checkout-item img {
+    margin-bottom: 10px;
+  }
+  .modal-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .modal-footer .btn {
+    width: 100%;
+  }
+}
