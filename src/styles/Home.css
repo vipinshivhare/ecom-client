@@ -135,6 +135,7 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .home-grid-container {
+    margin-top: 56px; /* Reduced margin-top for mobile screens */
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
     padding: 15px;
