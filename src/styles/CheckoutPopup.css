@@ -136,3 +136,122 @@
     width: 100%;
   }
 }
+
+/* Light mode hover */
+@media (prefers-color-scheme: light) {
+  .modal-footer .btn:hover {
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
+    transform: translateY(-2px);
+    color: black; /* fine for light mode */
+  }
+}
+
+/* Dark mode hover */
+@media (prefers-color-scheme: dark) {
+  .modal-footer .btn:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    color: #fff; /* stays white in dark mode */
+  }
+}
+
+/* Dark mode checkout button fix */
+ @media (prefers-color-scheme: dark) {
+  .checkout-button .btn {
+    background: linear-gradient(
+      90deg,
+      rgba(34, 197, 94, 0.9) 0%,
+      rgba(202, 138, 4, 0.9) 30%,
+      rgba(37, 99, 235, 0.9) 65%,
+      rgba(225, 29, 72, 0.9) 100%
+    );
+    color: #ffffff;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .checkout-button .btn:hover {
+    background: linear-gradient(
+      90deg,
+      rgba(34, 197, 94, 1) 0%,
+      rgba(202, 138, 4, 1) 30%,
+      rgba(37, 99, 235, 1) 65%,
+      rgba(225, 29, 72, 1) 100%
+    );
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+} 
+
+
+
+
+/* Dark theme hover */
+.dark-theme .modal-footer .btn:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+  color: #fff; /* stays white in dark mode */
+}
+
+/* Dark theme checkout button */
+.dark-theme .modal-footer .btn {
+  background: linear-gradient(
+    90deg,
+    rgba(34, 197, 94, 0.9) 0%,
+    rgba(202, 138, 4, 0.9) 30%,
+    rgba(37, 99, 235, 0.9) 65%,
+    rgba(225, 29, 72, 0.9) 100%
+  );
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .modal-footer .btn:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(34, 197, 94, 1) 0%,
+    rgba(202, 138, 4, 1) 30%,
+    rgba(37, 99, 235, 1) 65%,
+    rgba(225, 29, 72, 1) 100%
+  );
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+
+/* Dark mode for modal */
+.dark-theme .modal-content {
+  background-color: #1e1e1e !important;
+  color: #eee !important;
+  border: 1.5px solid #444 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7) !important;
+}
+
+/* Close button color */
+.dark-theme .modal-header .btn-close {
+  filter: invert(1);
+}
+
+/* Buttons in dark mode */
+.dark-theme .modal-footer .btn {
+  background: linear-gradient(
+    90deg,
+    rgba(34, 197, 94, 0.9) 0%,
+    rgba(202, 138, 4, 0.9) 30%,
+    rgba(37, 99, 235, 0.9) 65%,
+    rgba(225, 29, 72, 0.9) 100%
+  );
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.5);
+}
+
+.dark-theme .modal-footer .btn:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(34, 197, 94, 1) 0%,
+    rgba(202, 138, 4, 1) 30%,
+    rgba(37, 99, 235, 1) 65%,
+    rgba(225, 29, 72, 1) 100%
+  );
+  color: #fff;
+  transform: translateY(-2px);
+}
