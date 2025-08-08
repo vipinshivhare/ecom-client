@@ -58,13 +58,17 @@ const Home = ({ selectedCategory }) => {
 
   if (isLoadingData) {
     return (
-      <div className="text-center" style={{ padding: "18rem", color: 'var(--para-clr)' }}>
-        <h2>Fetching data from backend, it's a free server so it's taking time.</h2>
-        <h3>Thank you for your patience.</h3>
+      <div className="fetching-container">
+        <p className="fetching-msg">
+          Fetching data from backend, it's a free server so it's taking time.
+        </p>
+        <p className="fetching-sub">
+          Thank you for your patience.
+        </p>
       </div>
     );
   }
-
+  
   return (
     <>
       <AppNotification show={showNotification} message={notificationMessage} type={notificationType} />
