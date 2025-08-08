@@ -30,7 +30,7 @@ const UpdateProduct = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://ecom-serverside.onrender.com/api/product/${id}`
+          `${import.meta.env.VITE_API_BASE_URL}/product/${id}`
         );
         setProduct(response.data);
         
@@ -47,7 +47,7 @@ const UpdateProduct = () => {
         });
 
         const responseImage = await axios.get(
-          `https://ecom-serverside.onrender.com/api/product/${id}/image`,
+          `${import.meta.env.VITE_API_BASE_URL}/product/${id}/image`,
           { responseType: "blob" }
         );
         const imageFile = new File([responseImage.data], response.data.imageName || "product_image.jpg", { type: responseImage.data.type });
@@ -88,7 +88,7 @@ const UpdateProduct = () => {
     );
 
     try {
-      await axios.put(`https://ecom-serverside.onrender.com/api/product/${id}`, formData, {
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/product/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

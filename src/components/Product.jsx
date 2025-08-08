@@ -20,7 +20,7 @@ const Product = () => {
     const fetchProduct = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`https://ecom-serverside.onrender.com/api/product/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/product/${id}`);
         setProduct(response.data);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -40,7 +40,7 @@ const Product = () => {
   const deleteProduct = async () => {
     setIsLoading(true);
     try {
-      await axios.delete(`https://ecom-serverside.onrender.com/api/product/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/product/${id}`);
       removeFromCart(id);
       setNotificationMessage("Product deleted successfully");
       setNotificationType("success");

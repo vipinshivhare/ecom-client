@@ -50,7 +50,7 @@ const AddProduct = () => {
     );
 
     axios
-      .post("https://ecom-serverside.onrender.com/api/product", formData, {
+      .post(`${import.meta.env.VITE_API_BASE_URL}/product`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -85,7 +85,7 @@ const Navbar = ({ onSelectCategory }) => {
       setShowSearchResults(true);
       try {
         const response = await axios.get(
-          `https://ecom-serverside.onrender.com/api/products/search?keyword=${value}`
+          `${import.meta.env.VITE_API_BASE_URL}/products/search?keyword=${value}`
         );
         setSearchResults(response.data);
         setNoResults(response.data.length === 0);
