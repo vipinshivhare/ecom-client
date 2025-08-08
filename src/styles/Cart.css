@@ -185,31 +185,54 @@
 }
 
 /* Responsive adjustments */
+/* Base stays same as yours — only mobile improvements below */
+
 @media (max-width: 768px) {
   .shopping-cart {
-    padding: 20px;
+    padding: 18px;
+    border-radius: 8px;
   }
+
   .item {
     flex-direction: column;
     align-items: flex-start;
-    text-align: left;
+    gap: 12px;
   }
+
   .cart-item-image {
-    margin-bottom: 10px;
+    width: 90px;
+    height: 90px;
   }
-  .description, .quantity, .total-price, .remove-btn {
+
+  .description,
+  .quantity,
+  .total-price,
+  .remove-btn {
     width: 100%;
     text-align: left;
   }
+
   .quantity {
     justify-content: flex-start;
   }
+
   .total-price {
+    margin-top: 5px;
     text-align: left;
-    margin-top: 10px;
+    font-size: 16px;
   }
+
   .total {
     justify-content: flex-start;
+    font-size: 20px;
+  }
+
+  /* Better checkout button for tablet/mobile */
+  .checkout-button .btn {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px 0;
+    border-radius: 12px;
   }
 }
 
@@ -217,21 +240,118 @@
   .shopping-cart {
     padding: 15px;
   }
+
   .title {
-    font-size: 20px;
-  }
-  .cart-item-image {
-    width: 80px;
-    height: 80px;
-  }
-  .description span:first-child {
-    font-size: 16px;
-  }
-  .total-price {
-    font-size: 16px;
-  }
-  .checkout-button .btn {
     font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .cart-item-image {
+    width: 75px;
+    height: 75px;
+  }
+
+  .description span:first-child {
+    font-size: 15px;
+  }
+
+  .description span:last-child {
+    font-size: 13px;
+  }
+
+  .quantity button {
+    padding: 6px 10px;
+    font-size: 16px;
+  }
+
+  .quantity input {
+    width: 36px;
+    font-size: 14px;
+  }
+
+  .total-price {
+    font-size: 15px;
+  }
+
+  .checkout-button .btn {
+    font-size: 16px;
     padding: 12px 0;
+    border-radius: 14px;
+    background: linear-gradient(
+      90deg,
+      rgba(52, 211, 153, 1) 0%,
+      rgba(255, 224, 102, 1) 30%,
+      rgba(96, 165, 250, 1) 65%,
+      rgba(251, 113, 133, 1) 100%
+    );
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .checkout-button .btn:hover {
+    transform: scale(1.02);
+    color: #fff;
+  }
+}
+
+/* Better fix for very small screens */
+@media (max-width: 400px) {
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  /* Image & description in first row */
+  .cart-item-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Quantity, price & delete in one row */
+  .quantity,
+  .total-price,
+  .remove-btn {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .quantity {
+    gap: 3px;
+    border-radius: 6px;
+  }
+
+  .quantity button {
+    padding: 4px 8px;
+    font-size: 14px;
+  }
+
+  .quantity input {
+    width: 30px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  /* Force them on same row */
+  .item .quantity,
+  .item .total-price,
+  .item .remove-btn {
+    vertical-align: middle;
+  }
+
+  .item > *:nth-child(n+3) {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0;
+    margin-right: 6px;
+  }
+
+  .total-price {
+    font-size: 13px;
+    min-width: auto;
+  }
+
+  .remove-btn {
+    font-size: 16px;
+    cursor: pointer;
   }
 }
