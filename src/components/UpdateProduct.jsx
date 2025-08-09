@@ -26,45 +26,47 @@ const UpdateProduct = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/product/${id}`
-        );
-        setProduct(response.data);
-        
-        setUpdateProduct({
-          id: response.data.id,
-          name: response.data.name,
-          description: response.data.description,
-          brand: response.data.brand,
-          price: Number(response.data.price),
-          category: response.data.category,
-          releaseDate: response.data.releaseDate ? new Date(response.data.releaseDate).toISOString().split('T')[0] : '',
-          available: response.data.available,
-          quantity: Number(response.data.quantity),
-        });
+  const fetchProduct = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/product/${id}`
+      );
+      setProduct(response.data);
 
-        const responseImage = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/product/${id}/image`,
-          { responseType: "blob" }
-        );
-        const imageFile = new File([responseImage.data], response.data.imageName || "product_image.jpg", { type: responseImage.data.type });
-        setImage(imageFile);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        setNotificationMessage("Error loading product for update.");
-        setNotificationType("error");
-        setShowNotification(true);
-        setTimeout(() => setShowNotification(false), 3000);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      setUpdateProduct({
+        id: response.data.id,
+        name: response.data.name,
+        description: response.data.description,
+        brand: response.data.brand,
+        price: Number(response.data.price),
+        category: response.data.category,
+        releaseDate: response.data.releaseDate
+          ? new Date(response.data.releaseDate).toISOString().split("T")[0]
+          : "",
+        available: response.data.available,
+        quantity: Number(response.data.quantity),
+      });
 
-    fetchProduct();
-  }, [id]);
+      const responseImage = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/product/${id}/image`,
+        { responseType: "blob" }
+      );
+      const imageFile = new File(
+        [responseImage.data],
+        response.data.imageName || "product_image.jpg",
+        { type: responseImage.data.type }
+      );
+      setImage(imageFile);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      setIsLoading(false);
+    }
+  };
+
+  fetchProduct();
+}, [id]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,9 +127,13 @@ const UpdateProduct = () => {
 
   if (isLoading) {
     return (
-      <div className="text-center" style={{ padding: "18rem", color: 'var(--para-clr)' }}>
-        <h2>Fetching data from backend, it's a free server so it's taking time.</h2>
-        <h3>Thank you for your patience.</h3>
+      <div className="fetching-container">
+        <p className="fetching-msg">
+          Fetching data from backend, it's a free server so it's taking time.
+        </p>
+        <p className="fetching-sub">
+          Thank you for your patience.
+        </p>
       </div>
     );
   }
