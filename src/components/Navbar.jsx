@@ -115,6 +115,7 @@ const Navbar = ({ onSelectCategory }) => {
 
   useEffect(() => {
     document.body.className = theme;
+    document.documentElement.className = theme;
   }, [theme]);
 
   const categories = [

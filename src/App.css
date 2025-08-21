@@ -22,23 +22,23 @@
 /* Theme specific variables */
 .light-theme {
   --root_background: white;
-  --body_background: white;
+  --body_background: #f8fafc;
   --navbar_background: white;
   --navbar_text : black;
   --body_color : white;
   --link_color : rgb(0, 0, 0);
   --link_hover_color : rgb(35, 35, 35);
   --link_visited_color : purple;
-  --para-clr:black;
+  --para-clr: black;
   --cart_body_color: white;
   --quantity-clr: rgb(0, 0, 0);
-  --button-clr: black;
+  --button-clr: white;
   --card-bg-clr: white;
   --btn-bg: var(--navbar_background);
   --btn-clr: black;
   --category-hvr: rgb(200, 200, 200);
   --search_result-bg: rgb(239, 239, 239);
-  --hr_line_card: black;
+  --hr_line_card: #e5e7eb;
   --color-text: #1e293b;
 }
 
