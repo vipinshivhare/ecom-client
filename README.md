@@ -48,6 +48,12 @@ Visit [http://localhost:5173](http://localhost:5173) in your browser.
 npm run build
 ```
 The production build will be in the `dist/` folder.
+```
+
+---
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
